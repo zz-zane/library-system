@@ -216,3 +216,24 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Node.js / Vite
+node_modules/
+.pnpm-store/
+*.tsbuildinfo
+
+# Local database runtime files
+database/*.db
+database/*.db-journal
+database/*.sqlite
+database/*.sqlite3
+
+# Claude Code local state and generated worktrees
+.claude/settings.local.json
+.claude/worktrees/
+
+# Local environment overrides
+.env.*.local
+
+# Browser automation artifacts
+.playwright-mcp/
