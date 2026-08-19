@@ -1,6 +1,30 @@
-# 图书管理员系统
+# Multi-LLM Library System
 
-一个基于 FastAPI、Vue 3 和 SQLite 的开源图书管理平台，提供操作员认证、图书管理、读者管理和借阅管理功能。
+> **More than a library management app — this repository is a working blueprint for multi-LLM software collaboration.**
+
+本项目**不仅是一个可运行的图书管理系统，更是一套真实落地的多模型协作开发范例**。图书管理业务是验证载体，核心价值是展示 GPT Sol、GPT Luna、Kimi 与 DeepSeek 如何在独立 Git 工作树中完成需求冻结、专业分工、并行实现、独立测试、缺陷归因和受控整合，并通过“一文件一负责人”避免多个 Agent 同时修改同一文件造成的混乱。
+
+## Multi-LLM Collaboration Logic
+
+项目由一个协调者和三个专业子工作树组成：
+
+| 角色 | 工作树职责 | 文件所有权 |
+|---|---|---|
+| **GPT Sol** | 总体设计、接口契约、任务拆解、审核与整合 | `main`、共享设计文档 |
+| **GPT Luna** | FastAPI、SQLAlchemy、认证、数据库和后端 API | `backend/**` |
+| **Kimi** | Vue 3 页面、路由、Pinia、API 调用和前端构建 | `frontend/**` |
+| **DeepSeek** | pytest 基础设施、契约测试、缺陷归因与回归验证 | `tests/**` |
+
+协作流程遵循以下规则：
+
+1. GPT Sol 先冻结需求、数据模型、API 和验收标准，再派发具体任务。
+2. 每个文件只归一个角色负责，三个子工作树不跨目录修改，避免并发覆盖和合并错乱。
+3. GPT Luna、Kimi 和 DeepSeek 在各自分支中自行配置环境、实现、验证并提交。
+4. 后端、前端和测试可以在目录边界内并行工作；存在依赖时按测试结果串行修复。
+5. GPT Sol 只审核提交范围和结果，将通过验证的提交整合进 `main`，不代替专业 Agent 修改其文件。
+6. 整合后统一运行 pytest 和前端生产构建；失败由对应文件 Owner 修复，再进入下一轮。
+
+这种方式把多模型协作变成可审计的 **contract → isolated implementation → independent verification → controlled integration** 流程。
 
 ## 功能
 
