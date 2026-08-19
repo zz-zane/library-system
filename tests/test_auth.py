@@ -151,19 +151,24 @@ def test_login_non_string_username_422(client, require_routes):
 # ---------------------------------------------------------------------------
 
 
-def test_me_returns_current_user(client, require_routes, make_access_token, bearer_headers):
-    """有效 Bearer token → 200 ``UserOut``（id/username/display_name/is_active，§8.3）。"""
+def test_me_returns_current_user(client, db_session, make_user, require_routes,
+                                  make_access_token, bearer_headers):
+    """有效 Bearer token → 200 ``UserOut``（id/username/display_name/is_active，§8.3）。
+
+    鉴权按 JWT ``sub`` 查库（§6.2），因此先创建用户再签发对应 token。
+    """
     require_routes({AUTH_ME_ROUTE}, "M2 认证端点未实现：GET /api/auth/me 契约测试预期失败")
 
-    token = make_access_token(sub=1, username="librarian")
+    user = make_user(username="librarian", password="password123", display_name="管理员")
+    token = make_access_token(sub=user.id, username="librarian")
     resp = client.get("/api/auth/me", headers=bearer_headers(token))
 
     assert resp.status_code == 200
     data = resp.json()
-    assert data["id"] == 1
+    assert data["id"] == user.id
     assert data["username"] == "librarian"
-    assert "display_name" in data
-    assert "is_active" in data
+    assert data["display_name"] == "管理员"
+    assert data["is_active"] is True
 
 
 # ---------------------------------------------------------------------------

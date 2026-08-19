@@ -52,13 +52,17 @@ _TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=_TES
 
 
 def _password_hash(password: str) -> str:
-    """使用与后端一致的 passlib/bcrypt 生成密码哈希（D-05、§6.3）。
+    """生成与后端完全一致的密码哈希。
 
-    延迟导入以允许在依赖缺失时由上层契约测试先行标记预期失败。
+    后端（backend/app/core/security.py）采用 ``sha256 预哈希 + bcrypt``，
+    并已实测 ``passlib 1.7.4`` 与 ``bcrypt>=5`` 不兼容（passlib 哈希会抛
+    ``ValueError: password cannot be longer than 72 bytes``）。因此这里直接
+    复用后端 ``get_password_hash``，确保 make_user 写入的测试数据能被后端
+    ``verify_password`` 正确验证。
     """
-    from passlib.context import CryptContext
+    from backend.app.core.security import get_password_hash
 
-    return CryptContext(schemes=["bcrypt"], deprecated="auto").hash(password)
+    return get_password_hash(password)
 
 
 # ---------------------------------------------------------------------------
