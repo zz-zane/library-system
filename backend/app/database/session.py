@@ -15,7 +15,12 @@ engine = create_engine(
     if settings.database_url.startswith("sqlite")
     else {},
 )
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+SessionLocal = sessionmaker(
+    autocommit=False,
+    autoflush=False,
+    expire_on_commit=False,
+    bind=engine,
+)
 
 
 def get_db():
@@ -24,3 +29,7 @@ def get_db():
         yield db
     finally:
         db.close()
+
+
+# Register all domain models on Base.metadata for create_all() and Alembic.
+from backend.app import models  # noqa: E402,F401
