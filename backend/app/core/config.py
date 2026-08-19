@@ -1,14 +1,19 @@
 from functools import lru_cache
 
-from pydantic import model_validator
+from pydantic import field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+INSECURE_SECRET_KEY = "development-only-secret-key-change-me"
 
 
 class Settings(BaseSettings):
     app_name: str = "Library System"
     environment: str = "development"
     database_url: str = "sqlite:///./database/library.db"
-    secret_key: str = "development-only-secret-key-change-me"
+    # No default is intentional: application startup must fail without an explicit key.
+    secret_key: str
+
     jwt_algorithm: str = "HS256"
     access_token_expire_minutes: int = 1440
     borrow_days_default: int = 30
@@ -29,12 +34,16 @@ class Settings(BaseSettings):
     def cors_origin_list(self) -> list[str]:
         return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
 
+    @field_validator("secret_key")
+    @classmethod
+    def validate_secret_key(cls, value: str) -> str:
+        normalized = value.strip()
+        if not normalized or normalized == INSECURE_SECRET_KEY:
+            raise ValueError("必须显式配置安全的 SECRET_KEY，不能使用开发占位值")
+        return normalized
+
     @model_validator(mode="after")
     def validate_security_settings(self) -> "Settings":
-        if self.environment == "production" and (
-            not self.secret_key or self.secret_key == "development-only-secret-key-change-me"
-        ):
-            raise ValueError("生产环境必须配置安全的 SECRET_KEY")
         if self.jwt_algorithm != "HS256":
             raise ValueError("MVP 仅支持 HS256 JWT")
         if self.access_token_expire_minutes <= 0:
