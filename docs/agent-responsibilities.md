@@ -8,10 +8,10 @@
 
 | 角色 | 协作者 | 工作树目录 | Git 分支 | 主要职责 |
 |------|--------|------------|----------|----------|
-| 总设计师 | **GPT Sol** | 主工作树 `D:/project/library-system` | `main` | 需求分析、总体架构、任务拆解与调度、跨模块决策、成果审核和最终整合 |
-| 后端工程师 | **GPT Luna** | `D:/project/test/library-system/gpt` | `zz-zane/back_GPT_luna` | FastAPI、SQLAlchemy、Pydantic、认证、数据库、后端 API 及后端自测 |
-| 前端工程师 | **Kimi** | `D:/project/test/library-system/great` | `zz-zane/for_kimi` | Vue 3、TypeScript、Element Plus、Pinia、Vue Router、页面与交互实现 |
-| 测试工程师 | **DeepSeek** | `D:/project/test/library-system/tester_deepseek` | `zz-zane/tester_deepseek` | 测试计划、pytest 单元与集成测试、缺陷复现、回归验证和质量报告 |
+| 总设计师 | **GPT Sol** | 主工作树（仓库根目录） | `main` | 需求分析、总体架构、任务拆解与调度、跨模块决策、成果审核和最终整合 |
+| 后端工程师 | **GPT Luna** | 后端子工作树 | `zz-zane/back_GPT_luna` | FastAPI、SQLAlchemy、Pydantic、认证、数据库、后端 API 及后端自测 |
+| 前端工程师 | **Kimi** | 前端子工作树 | `zz-zane/for_kimi` | Vue 3、TypeScript、Element Plus、Pinia、Vue Router、页面与交互实现 |
+| 测试工程师 | **DeepSeek** | 测试子工作树 | `zz-zane/tester_deepseek` | 测试计划、pytest 单元与集成测试、缺陷复现、回归验证和质量报告 |
 
 ## 职责边界
 
